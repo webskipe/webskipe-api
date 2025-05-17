@@ -1,1 +1,3 @@
 djangorestframework==3.16.0
+pymysql==1.1.1
+pillow==11.2.1
