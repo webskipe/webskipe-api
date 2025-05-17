@@ -2,10 +2,11 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
-
 from .models import Reaction, Comment
 from .serializers import ReactionSerializer, CommentSerializer
 from pages.permissions import IsOwnerOrReadOnly
+
+
 
 class ReactionViewSet(viewsets.ModelViewSet):
     """View for managing reaction APIs"""
@@ -53,7 +54,8 @@ class CommentViewSet(viewsets.ModelViewSet):
     """View for managing comment APIs"""
     serializer_class = CommentSerializer
     queryset = Comment.objects.all()
-    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
+    # permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['page']
     

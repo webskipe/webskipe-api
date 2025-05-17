@@ -2,7 +2,10 @@ from rest_framework import viewsets, permissions, status, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.decorators import api_view
+from django.db.models import Count
 
+from reactions.models import Reaction
 from .models import Page, PageMedia
 from .serializers import (
     PageSerializer,
@@ -78,3 +81,13 @@ class PageViewSet(viewsets.ModelViewSet):
         
         serializer = PageMediaSerializer(media)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+
+
+@api_view(['GET'])
+def page_reactions_summary(request, page_id):
+    reactions = Reaction.objects.filter(page_id=page_id) \
+        .values('reaction_type') \
+        .annotate(count=Count('id')) \
+        .order_by('-count')
+    return Response(reactions)

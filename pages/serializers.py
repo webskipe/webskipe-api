@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from users.serializers import UserSerializer
 from .models import Page, PageMedia
 
 class PageMediaSerializer(serializers.ModelSerializer):
@@ -13,7 +15,7 @@ class PageSerializer(serializers.ModelSerializer):
     """Serializer for pages"""
     
     media = PageMediaSerializer(many=True, read_only=True)
-    user = serializers.StringRelatedField(read_only=True)
+    user = UserSerializer(read_only=True)
     view_url = serializers.SerializerMethodField()
     reactions_count = serializers.SerializerMethodField()
     
@@ -57,7 +59,7 @@ class PageCreateSerializer(serializers.ModelSerializer):
 class PageListSerializer(serializers.ModelSerializer):
     """Serializer for listing pages (with less fields)"""
     
-    user = serializers.StringRelatedField(read_only=True)
+    user = UserSerializer(read_only=True)
     reactions_count = serializers.SerializerMethodField()
     
     class Meta:
