@@ -72,7 +72,11 @@ class PageListSerializer(serializers.ModelSerializer):
         )
         
     def get_previewImage(self, obj):
-        return obj.media.first().file.url if obj.media.exists() else None
+        request = self.context.get("request")
+        if obj.media.exists():
+            url = obj.media.first().file.url
+            return request.build_absolute_uri(url) if request else url
+        return None
     
     
     def get_reactions_count(self, obj):
