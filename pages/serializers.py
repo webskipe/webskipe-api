@@ -42,14 +42,14 @@ class PageSerializer(serializers.ModelSerializer):
 
 class PageCreateSerializer(serializers.ModelSerializer):
     """Serializer for creating a new page"""
-    
     class Meta:
         model = Page
         fields = (
             'title', 'context', 'message', 'tone', 'template',
             'primary_color', 'background_color', 'privacy',
-            'status', 'expiry_date'
+            'status', 'expiry_date', 'slug'
         )
+    
     
     def create(self, validated_data):
         """Create a page with current user"""
@@ -61,14 +61,19 @@ class PageListSerializer(serializers.ModelSerializer):
     
     user = UserSerializer(read_only=True)
     reactions_count = serializers.SerializerMethodField()
+    previewImage = serializers.SerializerMethodField()
     
     class Meta:
         model = Page
         fields = (
             'id', 'user', 'title', 'slug', 'tone', 'template',
             'privacy', 'status', 'views', 'created_at',
-            'reactions_count'
+            'reactions_count', 'previewImage'
         )
+        
+    def get_previewImage(self, obj):
+        return obj.media.first().file.url if obj.media.exists() else None
+    
     
     def get_reactions_count(self, obj):
         return obj.reactions.count()

@@ -63,7 +63,7 @@ class PageViewSet(viewsets.ModelViewSet):
                 {'error': 'You cannot upload media to this page'},
                 status=status.HTTP_403_FORBIDDEN
             )
-        
+            
         file_obj = request.FILES.get('file')
         if not file_obj:
             return Response(
