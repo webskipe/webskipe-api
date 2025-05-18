@@ -19,7 +19,7 @@ class PageViewSet(viewsets.ModelViewSet):
     """View for managing page APIs"""
     serializer_class = PageSerializer
     queryset = Page.objects.all()
-    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
+    # permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
     lookup_field = 'slug'
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['tone', 'template', 'status', 'privacy']
