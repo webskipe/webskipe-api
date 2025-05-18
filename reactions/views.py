@@ -51,6 +51,13 @@ class ReactionViewSet(viewsets.ModelViewSet):
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+    @action(detail=False, methods=['GET'])
+    def my_reactions(self, request):
+        """Get the reactions for the current user"""
+        page_id = request.query_params.get('page')
+        reactions = Reaction.objects.filter(user=request.user, page__id=page_id).values_list('reaction_type', flat=True)
+        return Response({'reactions': list(reactions)})
 
 class CommentViewSet(viewsets.ModelViewSet):
     """View for managing comment APIs"""
