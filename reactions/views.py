@@ -61,10 +61,12 @@ class CommentViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['page']
     
-    @action(detail=True, methods=['get'])
+    @action(detail=False, methods=['GET'], url_path="byPage/(?P<value>[^/.]+)")
     def filter_page(self, request, value):
-        """Filter comments by page"""
-        return Comment.objects.filter(page__id=value)
+        """Filter comments by page UUID"""
+        comments = Comment.objects.filter(page__id=value)
+        serializer = self.get_serializer(comments, many=True)
+        return Response(serializer.data)
     
     
     def perform_create(self, serializer):
