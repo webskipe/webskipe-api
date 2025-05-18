@@ -36,6 +36,11 @@ class PageViewSet(viewsets.ModelViewSet):
             return self.queryset.filter(status='published', privacy='public')
         return self.queryset
     
+    def retrieve(self, request, slug=None):
+        page = Page.objects.get(slug=slug)
+        serializer = self.get_serializer(page)
+        return Response(serializer.data)
+    
     def get_serializer_class(self):
         """Return appropriate serializer class"""
         if self.action == 'list':
