@@ -2,6 +2,8 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
+
+from pages.models import Page
 from .models import Reaction, Comment
 from .serializers import ReactionSerializer, CommentSerializer
 from pages.permissions import IsOwnerOrReadOnly
@@ -58,6 +60,12 @@ class CommentViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['page']
+    
+    @action(detail=True, methods=['get'])
+    def filter_page(self, request, value):
+        """Filter comments by page"""
+        return Comment.objects.filter(page__id=value)
+    
     
     def perform_create(self, serializer):
         """Create a new comment"""
